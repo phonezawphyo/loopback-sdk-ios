@@ -17,3 +17,4 @@ node_modules
 *.xccheckout
 *.lock
 Pods
+.DS_Store

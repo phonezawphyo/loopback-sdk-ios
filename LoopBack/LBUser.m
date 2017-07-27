@@ -64,14 +64,20 @@ static NSString * const DEFAULTS_CURRENT_USER_ID_KEY = @"LBUserRepositoryCurrent
 }
 
 - (void)loginWithEmail:(NSString*)email
-                    password:(NSString*)password
-                     success:(LBUserLoginSuccessBlock)success
-                     failure:(SLFailureBlock)failure {
+              password:(NSString*)password
+            dictionary:(NSDictionary *)dictionary
+               success:(LBUserLoginSuccessBlock)success
+               failure:(SLFailureBlock)failure {
     NSParameterAssert(email);
     NSParameterAssert(password);
+    
+    NSMutableDictionary* body = [[NSMutableDictionary alloc]initWithDictionary:dictionary];
+    body[@"email"] = email;
+    body[@"password"] = password;
+    
     [self invokeStaticMethod:@"login"
                   parameters:nil
-              bodyParameters:@{ @"email": email, @"password": password }
+              bodyParameters:body
                      success:^(id value) {
                          NSAssert([[value class] isSubclassOfClass:[NSDictionary class]], @"Received non-Dictionary: %@", value);
                          LBRESTAdapter* adapter = (LBRESTAdapter*)self.adapter;
@@ -87,16 +93,20 @@ static NSString * const DEFAULTS_CURRENT_USER_ID_KEY = @"LBUserRepositoryCurrent
 
 - (void)userByLoginWithEmail:(NSString*)email
                     password:(NSString*)password
+                  dictionary:(NSDictionary *)dictionary
                      success:(LBUserLoginFindUserSuccessBlock)success
                      failure:(SLFailureBlock)failure {
     NSParameterAssert(email);
     NSParameterAssert(password);
-    [self loginWithEmail:email password:password success:^(LBAccessToken* token){
-        [self findById:token.userId success:^(LBModel *model){
-            self.cachedCurrentUser = (LBUser*)model;
-            success((LBUser*)model);
-        } failure:failure];
-    } failure:failure];
+    [self loginWithEmail:email
+                password:password
+              dictionary:dictionary
+                 success:^(LBAccessToken* token){
+                     [self findById:token.userId success:^(LBModel *model){
+                         self.cachedCurrentUser = (LBUser*)model;
+                         success((LBUser*)model);
+                     } failure:failure];
+                 } failure:failure];
 }
 
 - (void)findCurrentUserWithSuccess:(LBUserFindUserSuccessBlock)success

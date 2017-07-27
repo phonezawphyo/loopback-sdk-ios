@@ -65,11 +65,13 @@ typedef void (^LBUserLoginSuccessBlock)(LBAccessToken* token);
  *
  * @param email    The user email.
  * @param password The user password.
+ * @param dictionary  Any additional data to encapsulate.
  * @param success  The block to be executed when the login is successful.
  * @param failure  The block to be executed when the login fails.
  */
 - (void)loginWithEmail:(NSString*)email
               password:(NSString*)password
+            dictionary:(NSDictionary *)dictionary
                success:(LBUserLoginSuccessBlock)success
                failure:(SLFailureBlock)failure;
 
@@ -83,11 +85,13 @@ typedef void (^LBUserLoginFindUserSuccessBlock)(LBUser *user);
  *
  * @param email    The user email.
  * @param password The user password.
+ * @param dictionary  Any additional data to encapsulate.
  * @param success  The block to be executed when the login is successful.
  * @param failure  The block to be executed when the login fails.
  */
 - (void)userByLoginWithEmail:(NSString*)email
                     password:(NSString*)password
+                  dictionary:(NSDictionary *)dictionary
                      success:(LBUserLoginFindUserSuccessBlock)success
                      failure:(SLFailureBlock)failure;
 
