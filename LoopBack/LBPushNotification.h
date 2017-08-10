@@ -13,7 +13,7 @@
 /**
  @abstract Push Notification Type: Indicates in what state was app when received it (Foreground, Background, Terminated)
  
- @discussion
+ @discussion Test
  */
 typedef enum LBPushNotificationType {
   /** App was on Foreground */

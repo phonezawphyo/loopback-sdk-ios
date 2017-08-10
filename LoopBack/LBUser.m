@@ -86,7 +86,8 @@ static NSString * const DEFAULTS_CURRENT_USER_ID_KEY = @"LBUserRepositoryCurrent
                          }
                          LBAccessToken *accessToken = (LBAccessToken*)[self.accessTokenRepository modelWithDictionary:(NSDictionary*)value];
                          adapter.accessToken = accessToken._id;
-                         self.currentUserId = accessToken.userId;
+                         // accessToken.userId comes in long type
+                         self.currentUserId = [[NSNumber alloc] initWithLong: accessToken.userId].stringValue;
                          success(accessToken);
                      } failure:failure];
 }
@@ -102,7 +103,8 @@ static NSString * const DEFAULTS_CURRENT_USER_ID_KEY = @"LBUserRepositoryCurrent
                 password:password
               dictionary:dictionary
                  success:^(LBAccessToken* token){
-                     [self findById:token.userId success:^(LBModel *model){
+                     [self findById:[[NSNumber alloc] initWithLong:token.userId].stringValue
+                            success:^(LBModel *model){
                          self.cachedCurrentUser = (LBUser*)model;
                          success((LBUser*)model);
                      } failure:failure];
@@ -170,7 +172,7 @@ static NSString * const DEFAULTS_CURRENT_USER_ID_KEY = @"LBUserRepositoryCurrent
 
 - (void)saveCurrentUserId {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:_currentUserId forKey:DEFAULTS_CURRENT_USER_ID_KEY];
+    [defaults setObject: _currentUserId forKey:DEFAULTS_CURRENT_USER_ID_KEY];
 }
 
 @end

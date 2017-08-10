@@ -13,7 +13,7 @@
 @interface LBAccessToken : LBPersistedModel
 
 /** The user id associated with this access token. */
-@property (nonatomic, copy) NSString *userId;
+@property (nonatomic) long userId;
 
 @end
 

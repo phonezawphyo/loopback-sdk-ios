@@ -479,7 +479,11 @@ static void AFNetworkReachabilityReleaseCallback(const void *info) {
                     [request setValue:[NSString stringWithFormat:@"application/json; charset=%@", charset] forHTTPHeaderField:@"Content-Type"];
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wassign-enum"
-                    [request setHTTPBody:[NSJSONSerialization dataWithJSONObject:parameters options:0 error:&error]];
+                    if (parameters[@"json"] != nil) {
+                        [request setHTTPBody:[NSJSONSerialization dataWithJSONObject:parameters[@"json"] options:0 error:&error]];
+                    } else {
+                        [request setHTTPBody:[NSJSONSerialization dataWithJSONObject:parameters options:0 error:&error]];
+                    }
 #pragma clang diagnostic pop
                     break;
                 case AFPropertyListParameterEncoding:;
